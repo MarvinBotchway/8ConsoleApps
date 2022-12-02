@@ -6,15 +6,29 @@ Console.WriteLine("Enter the length of a side of a square and press Enter.");
 
 string LengthOfSideOfSquareText = Console.ReadLine();
 
-// double.TryParse attemps the conversion of the input and returns a bool if it's a success. 
-// The result of the conversion is stored in the variable after the out keyword in the parenthesis
-bool isSuccess = double.TryParse(LengthOfSideOfSquareText, out double LengthOfSideOfSquare);
 
-// We use an if statement to check if the proccess was a success before running the calculation.
-if (isSuccess)
+// Using the built in LINQ library we can create 2 strings as shown below for the number part and the unit part
+string numberPart = new String(LengthOfSideOfSquareText.Where(Char.IsDigit).ToArray());
+string unitPart = new String(LengthOfSideOfSquareText.Where(Char.IsLetter).ToArray());
+
+
+// We TryParse the number part
+bool isSuccess = double.TryParse(numberPart, out double LengthOfSideOfSquare);
+
+
+// To make sure the user enters a unit we would check if unitPart.Count() > 0
+if (isSuccess && unitPart.Count() > 0)
 {
     double areaOfSquare = Math.Pow(LengthOfSideOfSquare, 2);
-    Console.WriteLine($"The area of the square is: {areaOfSquare}");
+
+    // Finally we add the {unitPart}² to the output string
+    // I do not have the (²) on my keyboard so I just copied from google.(Searched: character for squared)
+    Console.WriteLine($"The area of the square is: {areaOfSquare}{unitPart}²");
+}
+// Check if there is no unit and return a message.
+else if (unitPart.Count() == 0)
+{
+    Console.WriteLine($"Your input: {LengthOfSideOfSquareText} Does not have a unit. Please enter a unit next time");
 }
 else
 { 
